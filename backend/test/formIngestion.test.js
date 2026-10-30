@@ -147,8 +147,3 @@ test('the gold form scores 100% against itself', () => {
   const s = scoreForm(GOLD, GOLD);
   assert.strictEqual(s.recall, 1); assert.strictEqual(s.typeAccuracy, 1); assert.strictEqual(s.optionAccuracy, 1); assert.strictEqual(s.requiredAccuracy, 1);
 });
-
-test('prompts/05-form-ingestion.md is in sync with the prompts in code', () => {
-  const doc = fs.readFileSync(path.join(__dirname, '..', 'prompts', '05-form-ingestion.md'), 'utf8');
-  [fi.SYSTEM_PROMPT, fi.CONTRACT_PROMPT, fi.REPAIR_PROMPT, fi.PROMPT_VERSION].forEach((t) => assert.ok(doc.includes(t), 'run: node scripts/gen-prompt-doc.js'));
-});

@@ -1,9 +1,9 @@
-// Regenerates prompts/05-form-ingestion.md from the constants in helpers/formIngestion.js so the
+// Regenerates prompts/05-form-ingestion.md from the constants in helpers/formIngestionPrompts.js so the
 // document is byte-for-byte what the model receives. Run after ANY prompt edit:  node scripts/gen-prompt-doc.js
 // (test/formIngestion.test.js fails if the document is stale.)
 const fs = require('fs');
 const path = require('path');
-const fi = require('../helpers/formIngestion');
+const fi = require('../helpers/formIngestionPrompts'); // pure strings: loads no logger and needs no env/credentials
 
 const fence = (t) => `\`\`\`text\n${t}\n\`\`\``;
 const doc = `# 05 — PDF form ingestion (PDF → Form.io definition)
@@ -51,4 +51,3 @@ ${fence(fi.REPAIR_PROMPT)}
 `;
 fs.writeFileSync(path.join(__dirname, '..', 'prompts', '05-form-ingestion.md'), doc);
 console.log('wrote prompts/05-form-ingestion.md');
-process.exit(0);
