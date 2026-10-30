@@ -9,7 +9,7 @@ const {
   RATE_LIMIT_STATUSES, FoundryRateLimitError, retryAfterFromHeaders, runFoundryRequest,
 } = require('./foundryRateLimit');
 const {
-  SUPPORTED_TYPES, walk, flattenFields, repair, validate, heuristicFlags,
+  SUPPORTED_TYPES, LAYOUT_TYPES, walk, flattenFields, repair, validate, heuristicFlags,
 } = require('./formioSubset');
 
 const {
@@ -258,22 +258,51 @@ const buildManifest = (definition, modelFields, renames) => {
   });
   const fields = flattenFields(definition);
   const comps = fields.map((f) => f.component);
+
+  // Nearest datagrid ancestor of every input component. A table's columns are not separate things on the page, so a
+  // column the model did not list inherits its table's page and confidence instead of being reported as missing.
+  const gridOf = new Map();
+  const visit = (list, grid) => {
+    (list || []).forEach((c) => {
+      if (!c || typeof c !== 'object') return;
+      if (!LAYOUT_TYPES.has(c.type)) gridOf.set(c, grid);
+      const next = c.type === 'datagrid' ? c : grid;
+      visit(c.components, next);
+      (c.columns || []).forEach((col) => visit(col && col.components, next));
+    });
+  };
+  visit(definition.components, null);
+
+  const resolved = new Map(); // component -> { sourcePage, confidence } as finally reported (document order: a table is seen before its columns)
   return fields.map(({ component: c, parent }) => {
     const m = byKey.get(c.key);
+    const grid = gridOf.get(c);
     const flags = heuristicFlags(c, comps);
     const notes = [];
-    if (m && m.notes) notes.push(String(m.notes));
-    if (!m) notes.push('Model did not report this field');
-    const reported = m && Number.isFinite(Number(m.confidence)) ? Math.min(1, Math.max(0, Number(m.confidence))) : null;
+    let sourcePage;
+    let confidence;
+    let inheritedFrom = null;
+    if (!m && grid && resolved.has(grid)) {
+      ({ sourcePage, confidence } = resolved.get(grid));
+      inheritedFrom = grid.key;
+    } else {
+      if (m && m.notes) notes.push(String(m.notes));
+      if (!m) notes.push('Model did not report this field');
+      const reported = m && Number.isFinite(Number(m.confidence)) ? Math.min(1, Math.max(0, Number(m.confidence))) : null;
+      sourcePage = m && Number.isInteger(Number(m.sourcePage)) ? Number(m.sourcePage) : null;
+      confidence = m ? reported : 0.5;
+    }
+    resolved.set(c, { sourcePage, confidence });
     return {
       key: c.key,
       type: c.type,
       label: c.label || '',
       section: parent && (parent.title || parent.label) ? (parent.title || parent.label) : '',
-      sourcePage: m && Number.isInteger(Number(m.sourcePage)) ? Number(m.sourcePage) : null,
-      confidence: m ? reported : 0.5,
+      sourcePage,
+      confidence,
       notes: notes.join('; '),
       flags,
+      inheritedFrom,
     };
   });
 };

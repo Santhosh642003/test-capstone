@@ -147,3 +147,71 @@ test('the gold form scores 100% against itself', () => {
   const s = scoreForm(GOLD, GOLD);
   assert.strictEqual(s.recall, 1); assert.strictEqual(s.typeAccuracy, 1); assert.strictEqual(s.optionAccuracy, 1); assert.strictEqual(s.requiredAccuracy, 1);
 });
+
+// ---- manifest: components nested in a datagrid inherit the table's page and confidence ----
+const gridFixture = () => ({
+  display: 'form',
+  components: [{
+    type: 'panel', key: 'sectionC', title: 'Section C', input: false,
+    components: [
+      {
+        type: 'datagrid', key: 'meds', label: 'Medications', input: true,
+        components: [
+          { type: 'textfield', key: 'medication', label: 'Medication', input: true },
+          { type: 'textfield', key: 'dose', label: 'Dose', input: true },
+          { type: 'textfield', key: 'rx', label: 'Rx', input: true },
+          { type: 'panel', key: 'more', title: 'More', input: false, components: [{ type: 'textfield', key: 'notesCol', label: 'Notes', input: true }] },
+        ],
+      },
+      { type: 'textfield', key: 'outside', label: 'Outside', input: true },
+    ],
+  }],
+});
+const entry = (rows, key) => rows.find((r) => r.key === key);
+
+test('manifest: datagrid children the model did not list inherit the table page and confidence, and are not "unreported"', () => {
+  const rows = fi.buildManifest(gridFixture(), [
+    { key: 'meds', sourcePage: 2, confidence: 0.9, notes: 'blank-row table read as a datagrid' },
+    { key: 'dose', sourcePage: 2, confidence: 0.6, notes: 'unit unclear' }, // reported by the model: must keep its own values
+  ], []);
+
+  ['medication', 'rx', 'notesCol'].forEach((key) => { // notesCol sits in a panel inside the table: nearest datagrid ancestor still applies
+    const r = entry(rows, key);
+    assert.strictEqual(r.sourcePage, 2, key);
+    assert.strictEqual(r.confidence, 0.9, key);
+    assert.strictEqual(r.notes, '', `${key} must not carry "did not report"`);
+    assert.strictEqual(r.inheritedFrom, 'meds', key);
+  });
+  const dose = entry(rows, 'dose');
+  assert.strictEqual(dose.confidence, 0.6); assert.strictEqual(dose.notes, 'unit unclear'); assert.strictEqual(dose.inheritedFrom, null);
+  assert.strictEqual(entry(rows, 'meds').notes, 'blank-row table read as a datagrid');
+
+  // real heuristic flags are kept on inherited children
+  assert.deepStrictEqual(entry(rows, 'rx').flags, ['Very short label']);
+  assert.deepStrictEqual(entry(rows, 'medication').flags, []);
+
+  // an unreported field outside any table is still flagged
+  const outside = entry(rows, 'outside');
+  assert.match(outside.notes, /did not report/); assert.strictEqual(outside.confidence, 0.5); assert.strictEqual(outside.sourcePage, null); assert.strictEqual(outside.inheritedFrom, null);
+});
+
+test('manifest: when the model omitted the table itself, only the table is "unreported"; its columns inherit that resolved state', () => {
+  const rows = fi.buildManifest(gridFixture(), [], []);
+  assert.match(entry(rows, 'meds').notes, /did not report/);
+  ['medication', 'dose', 'rx', 'notesCol'].forEach((key) => {
+    const r = entry(rows, key);
+    assert.doesNotMatch(r.notes, /did not report/, key);
+    assert.strictEqual(r.confidence, 0.5, key);
+    assert.strictEqual(r.sourcePage, null, key);
+    assert.strictEqual(r.inheritedFrom, 'meds', key);
+  });
+  assert.deepStrictEqual(entry(rows, 'rx').flags, ['Very short label']);
+});
+
+test('manifest: inheritance also works end to end through runIngestion', async () => {
+  const model = fakeModel(() => ({ definition: gridFixture(), fields: [{ key: 'meds', sourcePage: 2, confidence: 0.85, notes: '' }, { key: 'outside', sourcePage: 2, confidence: 0.9, notes: '' }] }));
+  const r = await fi.runIngestion(SAMPLE_PDF, { callModel: model });
+  const medication = r.fields.find((f) => f.key === 'medication');
+  assert.strictEqual(medication.sourcePage, 2); assert.strictEqual(medication.confidence, 0.85); assert.strictEqual(medication.notes, '');
+  assert.ok(!r.fields.some((f) => /did not report/.test(f.notes)), 'nothing should be reported as missing');
+});
