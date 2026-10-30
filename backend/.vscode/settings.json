@@ -1,0 +1,20 @@
+{
+  // use ESLint as your default formatter
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "eslint.format.enable": true,
+
+  // format on save
+  "editor.formatOnSave": true,
+
+  // and also apply ESLint fixes as a code action on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // make sure the extension runs on your languages
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json"],
+
+  // ESLint 9 is flat-config only; most recent extension detects it automatically.
+  // If you ever need to force it:
+  "eslint.useFlatConfig": true
+}

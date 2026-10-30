@@ -1,0 +1,322 @@
+{
+  "SegmentDelimiter": "\n",
+  "DataElementDelimiter": "*",
+  "ISA": {
+    "AuthorizationInformationQualifier_1": "03",
+    "AuthorizationInformation_2": "0000000000",
+    "SecurityInformationQualifier_3": "00",
+    "SecurityInformation_4": "NONE      ",
+    "SenderIDQualifier_5": "ZZ",
+    "InterchangeSenderID_6": "ABCDEFGHIJKLMNO",
+    "ReceiverIDQualifier_7": "ZZ",
+    "InterchangeReceiverID_8": "610515         ",
+    "InterchangeDate_9": "101127", 
+    "InterchangeTime_10": "1719", 
+    "InterchangeControlStandardsIdentifier_11": "^",
+    "InterchangeControlVersionNumber_12": "00400",
+    "InterchangeControlNumber_13": "000003438",
+    "AcknowledgementRequested_14": "1",
+    "UsageIndicator_15": "P",
+    "ComponentElementSeparator_16": ":"
+  },
+  "Groups": [
+    {
+      "GS": {
+        "CodeIdentifyingInformationType_1": "HC",
+        "SenderIDCode_2": "99999999999",
+        "ReceiverIDCode_3": "610515",
+        "Date_4": "20111219",
+        "Time_5": "1340",
+        "GroupControlNumber_6": "1377",
+        "TransactionTypeCode_7": "X",
+        "VersionAndRelease_8": "005010X222A1"
+      },
+      "Transactions": [
+        {
+          "ST": {
+            "TransactionSetIdentifierCode_01": "837", 
+            "TransactionSetControlNumber_02": "0001", 
+            "ImplementationConventionPreference_03": "005010X222A1" 
+          },
+          "BHT_BeginningOfHierarchicalTransaction": {
+            "HierarchicalStructureCode_01": "",
+            "TransactionSetPurposeCode_02": "",
+            "SubmitterTransactionIdentifier_03": "", 
+            "TransactionSetCreationDate_04": "20110523",
+            "TransactionSetCreationTime_05": "154959",
+            "TransactionTypeCode_06": ""
+          },
+          "AllNM1": {
+            "Loop1000A": {
+              "NM1_SubmitterName": {
+                "EntityIdentifierCode_01": "41",
+                "EntityTypeQualifier_02": "2",
+                "ResponseContactLastorOrganizationName_03": " Premier Billing Service",
+                "IdentificationCodeQualifier_08": "46",
+                "ResponseContactIdentifier_09": "TGJ23"
+              },
+              "PER_SubmitterEDIContactInformation": [
+                {
+                  "ContactFunctionCode_01": "IC",
+                  "ResponseContactName_02": "JERRY",
+                  "CommunicationNumberQualifier_03": "TE",
+                  "ResponseContactCommunicationNumber_04": "3055552222",
+                  "CommunicationNumberQualifier_05": "EX",
+                  "ResponseContactCommunicationNumber_06": "231"
+                }
+              ]
+            },
+            "Loop1000B": {
+
+              "NM1_ReceiverName": {
+                "EntityIdentifierCode_01": "40",
+                "EntityTypeQualifier_02": "2",
+                "ResponseContactLastorOrganizationName_03": "Alliance Health and Life Insurance Company",
+                "IdentificationCodeQualifier_08": "46",
+                "ResponseContactIdentifier_09": "66783JJT"
+              }
+            }
+          },
+          "Loop2000A": [
+            {
+              "HL_BillingProviderHierarchicalLevel": {
+                "HierarchicalIDNumber_01": "1",
+                "HierarchicalLevelCode_03": "20",
+                "HierarchicalChildCode_04": "1"
+              },
+              "PRV_BillingProviderSpecialtyInformation": {
+                "ProviderCode_01": "BI",
+                "ProviderTaxonomyCode_03": "203BF0100Y"
+              },
+              "AllNM1": {
+                "Loop2010AA": {
+                  "NM1_BillingProviderName": {
+                    "EntityIdentifierCode_01": "85", 
+                    "EntityTypeQualifier_02": "2",
+                    "ResponseContactLastorOrganizationName_03": "Ben Kildare", 
+                    "IdentificationCodeQualifier_08": "XX",
+                    "ResponseContactIdentifier_09": "9876543210" 
+                  },
+                  "N3_BillingProviderAddress": {
+                    "ResponseContactAddressLine_01": "234 Seaway St" 
+                  },
+                  "N4_BillingProviderCity_State_ZIPCode": {
+                    "AdditionalPatientInformationContactCityName_01": "MIAMI", 
+                    "AdditionalPatientInformationContactStateCode_02": "FL",
+                    "AdditionalPatientInformationContactPostalZoneorZIPCode_03": "33111" 
+                  },
+                  "AllREF": {
+                    "REF_BillingProviderTaxIdentification": { 
+                      "MemberGrouporPolicyNumber_02": "587654321" 
+                    }
+                  }
+                },
+                "Loop2010AB": {
+                  "NM1_Pay_AddressName": {
+                    "EntityIdentifierCode_01": "87",
+                    "EntityTypeQualifier_02": "2",
+                    "ResponseContactLastorOrganizationName_03": "Kildare Associates" 
+                  },
+                  "N3_Pay_ToAddress_ADDRESS": {
+                    "ResponseContactAddressLine_01": "2345 OCEAN BLVD"
+                  },
+                  "N4_Pay_AddressCity_State_ZIPCode": {
+                    "AdditionalPatientInformationContactCityName_01": "MIAMI",
+                    "AdditionalPatientInformationContactStateCode_02": "FL",
+                    "AdditionalPatientInformationContactPostalZoneorZIPCode_03": "33111"
+                  }
+                }
+              },
+              "Loop2000B": [
+                {
+                  "HL_SubscriberHierarchicalLevel": {
+                    "HierarchicalIDNumber_01": "2",
+                    "HierarchicalParentIDNumber_02": "1",
+                    "HierarchicalLevelCode_03": "22",
+                    "HierarchicalChildCode_04": "0"
+                  },
+                  "SBR_SubscriberInformation": {
+                    "PayerResponsibilitySequenceNumberCode_01": "P",
+                    "InsuredGrouporPolicyNumber_03": "12312-A"
+                  },
+                  "AllNM1": {
+                    "Loop2010BA": {
+                      "NM1_SubscriberName": {
+                        "EntityIdentifierCode_01": "IL",
+                        "EntityTypeQualifier_02": "1",
+                        "ResponseContactLastorOrganizationName_03": "SMITH", 
+                        "ResponseContactFirstName_04": "Ted"
+                      },
+                      "DMG_SubscriberDemographicInformation": {
+                        "DateTimePeriodFormatQualifier_01": "D8",
+                        "DependentBirthDate_02": "19630625",
+                        "DependentGenderCode_03": "M"
+                      }
+                    },
+                    "Loop2010BB": {
+                      "NM1_PayerName": {
+                        "EntityIdentifierCode_01": "PR",
+                        "EntityTypeQualifier_02": "2",
+                        "ResponseContactLastorOrganizationName_03": "Alliance Health and Life Insurance Company",
+                        "IdentificationCodeQualifier_08": "XX",
+                        "ResponseContactIdentifier_09": "741234"
+                      }
+                    }
+                  },
+                  "Loop2000C": [
+                    {
+                  "Loop2300": [
+                        {
+                          "CLM_ClaimInformation": {
+                          "PatientControlNumber_01": "26462967",
+                          "TotalClaimChargeAmount_02": "100",
+                          "HealthCareServiceLocationInformation_05": {
+                            "FacilityTypeCode_01": "11",
+                            "FacilityCodeQualifier_02": "B",
+                            "ClaimFrequencyTypeCode_03": "1"
+                          },
+                          "ProviderorSupplierSignatureIndicator_06": "Y",
+                          "AssignmentorPlanParticipationCode_07": "A",
+                          "BenefitsAssignmentCertificationIndicator_08": "Y",
+                          "ReleaseofInformationCode_09": "I"
+                          },
+                        "AllREF": {
+                          "REF_ClaimIdentifierForTransmissionIntermediaries": {
+                            "ReferenceIdentificationQualifier_01": "D9",
+                            "MemberGrouporPolicyNumber_02": "17312345600006351"
+                          }
+                        },
+                          "AllHI": {
+                            "HI_HealthCareDiagnosisCode": {
+                              "HealthCareCodeInformation_01": {
+                                 "CodeListQualifierCode_01": "BK",
+                                 "IndustryCode_02": "0340"
+                              }
+                            }
+                          },
+                          "Loop2400": [
+                          {
+                            "LX_ServiceLineNumber": {
+                              "AssignedNumber_01": "1"
+                            },
+                            "SV1_ProfessionalService": {
+                              "CompositeMedicalProcedureIdentifier_01": {
+                                "ProductorServiceIDQualifier_01": "HC"
+                              },
+                              "LineItemChargeAmount_02": "40",
+                              "CompositeDiagnosisCodePointer_07": {
+                                "DiagnosisCodePointer_01": " "
+                              }
+                            },
+                            "AllDTP": {
+                              "DTP_Date_ServiceDate": {
+                                "DateTimeQualifier_01": "472",
+                                "DateTimePeriodFormatQualifier_02": "D8",
+                                "DateTimePeriod_03": "20061003"
+                              }
+                            }
+                          },
+                          {
+                            "LX_ServiceLineNumber": {
+                              "AssignedNumber_01": "2"
+                            },
+                            "SV1_ProfessionalService": {
+                              "CompositeMedicalProcedureIdentifier_01": {
+                                "ProductorServiceIDQualifier_01": "HC",
+                                "ProcedureCode_02": "99213"
+                              },
+                              "LineItemChargeAmount_02": "15",
+                              "UnitorBasisforMeasurementCode_03": "UN",
+                              "ServiceUnitCount_04": "1",
+                              "CompositeDiagnosisCodePointer_07": {
+                                "DiagnosisCodePointer_01": "1"
+                              }
+                            },
+                            "AllDTP": {
+                              "DTP_Date_ServiceDate": {
+                                "DateTimeQualifier_01": "472",
+                                "DateTimePeriodFormatQualifier_02": "D8",
+                                "DateTimePeriod_03": "20061003"
+                              }
+                            }
+                          },
+                          {
+                            "LX_ServiceLineNumber": {
+                              "AssignedNumber_01": "3"
+                            },
+                            "SV1_ProfessionalService": {
+                              "CompositeMedicalProcedureIdentifier_01": {
+                                "ProductorServiceIDQualifier_01": "HC",
+                                "ProcedureCode_02": "99213"
+                              },
+                              "LineItemChargeAmount_02": "35",
+                              "UnitorBasisforMeasurementCode_03": "UN",
+                              "ServiceUnitCount_04": "1",
+                              "CompositeDiagnosisCodePointer_07": {
+                                "DiagnosisCodePointer_01": "1"
+                              }                            },
+                            "AllDTP": {
+                              "DTP_Date_ServiceDate": {
+                                "DateTimeQualifier_01": "472",
+                                "DateTimePeriodFormatQualifier_02": "D8",
+                                "DateTimePeriod_03": "20061010"
+                              }
+                            }
+                          },
+                          {
+                            "LX_ServiceLineNumber": {
+                              "AssignedNumber_01": "4"
+                            },
+                            "SV1_ProfessionalService": {
+                                "CompositeMedicalProcedureIdentifier_01": {
+                                "ProductorServiceIDQualifier_01": "HC",
+                                "ProcedureCode_02": "99213"
+                              },
+                              "LineItemChargeAmount_02": "10",
+                              "UnitorBasisforMeasurementCode_03": "UN",
+                              "ServiceUnitCount_04": "1",
+                              "CompositeDiagnosisCodePointer_07": {
+                                "DiagnosisCodePointer_01": "1"
+                              }                            },
+                            "AllDTP": {
+                              "DTP_Date_ServiceDate": {
+                                "DateTimeQualifier_01": "472",
+                                "DateTimePeriodFormatQualifier_02": "D8",
+                                "DateTimePeriod_03": "20061010"
+                              }
+                            }
+                          }
+
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "SE": {
+            "NumberofIncludedSegments_01": "39",
+            "TransactionSetControlNumber_02": "0001"
+          },
+          "Model": "EdiNation.X12.HIPAA.005010.Base"
+        }
+      ],
+      "GETrailers": [
+        {
+          "NumberOfIncludedSets_1": "1"
+        }
+      ]
+    }
+  ],
+  "IEATrailers": [
+    {
+      "NumberOfIncludedGroups_1": "1",
+      "InterchangeControlNumber_2": "000003438"
+    }
+  ]
+}
+
+
+

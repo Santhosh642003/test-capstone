@@ -1,0 +1,428 @@
+{
+  "version": 1,
+  "description": "Per-business-type dropdown defaults applied at first-login company setup. Resolution: deep-merge _base with byBusinessType[<feature_id>]; per-EntityName arrays in byBusinessType replace (not append) the _base list for that EntityName. Each resulting (EntityName, value) becomes a row in the dropdowns table for the new company with is_Active=1, employeeType='ALL'. NOTE: byBusinessType lists are currently identical across all business types (mirroring the existing docx defaults); structure is in place so per-vertical lists can diverge later without contract changes.",
+  "businessTypes": {
+    "101": "Support Coordination",
+    "102": "Service Provider",
+    "103": "Home Healthcare",
+    "104": "Case Management",
+    "105": "Day Care Or Community Center",
+    "106": "Group Home"
+  },
+  "_base": {
+    "currency": [
+      "USD",
+      "INR"
+    ],
+    "salaryType": [
+      "Hourly",
+      "Monthly"
+    ],
+    "payrollFrequency": [
+      "Weekly",
+      "Bi-Weekly",
+      "Monthly",
+      "Semi-Monthly"
+    ],
+    "frequency": [
+      "Bi-monthly"
+    ],
+    "locStatus": [
+      "Active",
+      "Inactive"
+    ],
+    "empStatus": [
+      "Full Time",
+      "Temp",
+      "Contract"
+    ],
+    "customerStatus": [
+      "Active",
+      "Prospect",
+      "Transferred Out",
+      "Dormant"
+    ],
+    "contactStatus": [
+      "Dormant",
+      "Active",
+      "Prospect"
+    ],
+    "primaryBusinessType": [
+      "Support Coordination",
+      "Service Provider",
+      "Home Healthcare",
+      "Case Management",
+      "Day Care Or Community Center",
+      "Group Home"
+    ],
+    "masterSetting": [
+      "101-true",
+      "101-false",
+      "102-true",
+      "102-false",
+      "103-true",
+      "103-false",
+      "104-true",
+      "104-false",
+      "105-true",
+      "105-false",
+      "106-true",
+      "106-false"
+    ],
+    "functionality": [
+      "EVV",
+      "Time Management",
+      "Document Center",
+      "Form Builder",
+      "BI & Reporting",
+      "Tele Health",
+      "Third Party Billing",
+      "Financial Reporting",
+      "Scheduler",
+      "Secure Communication",
+      "Ability Hub Portal",
+      "Workflows",
+      "Referral Management",
+      "Private Payer Billing",
+      "AI Companion"
+    ]
+  },
+  "byBusinessType": {
+    "101": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    },
+    "102": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    },
+    "103": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    },
+    "104": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    },
+    "105": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    },
+    "106": {
+      "empType": [
+        "Admin",
+        "Manager",
+        "Fieldworker",
+        "Support Coordinator"
+      ],
+      "empLevel": [
+        "Fieldworker",
+        "Admin",
+        "Supervisor"
+      ],
+      "designation": [
+        "Admin",
+        "Support Coordinator",
+        "Manager",
+        "Supervisor"
+      ],
+      "customerType": [
+        "Organization",
+        "Individual"
+      ],
+      "contactType": [
+        "Patient",
+        "Family",
+        "Spouse",
+        "Support",
+        "Friend",
+        "Service Provider",
+        "Guardian"
+      ],
+      "locType": [
+        "Home",
+        "Rehab Center",
+        "Office",
+        "Service Provider Location"
+      ],
+      "taskType": [
+        "Planning",
+        "Eligibility Determination",
+        "Home Visit",
+        "Visit",
+        "On-boarding",
+        "Administration",
+        "Phone Call",
+        "Internal Meetings",
+        "Marketing",
+        "Training",
+        "Intake",
+        "Checklist",
+        "Unusual Incident",
+        "IT Support",
+        "SC Management",
+        "SC Supervision"
+      ]
+    }
+  }
+}

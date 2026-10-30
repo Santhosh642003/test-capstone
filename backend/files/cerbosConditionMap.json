@@ -1,0 +1,305 @@
+{
+  "LocateTab": {
+    "actions": {
+      "access": "P.attr.company_type != 105"
+    }
+  },
+  "BIAndReporting": {
+    "actions": {
+      "access": "16 in P.attr.modules"
+    }
+  },
+  "ReportTypes": {
+    "actions": {
+      "accessTimeManagementReports": "(12 in P.attr.modules) && (16 in P.attr.modules)",
+      "accessEVVReports": "(P.attr.company_type == 102) && ('NJ' in P.attr.states) && (11 in P.attr.modules)",
+      "accessCompanyReports": "(16 in P.attr.modules)",
+      "accessBillingReports": "(18 in P.attr.modules) && (19 in P.attr.modules)",
+      "accessSupportCoordinationReports": "(P.attr.company_type == 101) && ('NJ' in P.attr.states)",
+      "accessCaseManagementReports": "(P.attr.company_type == 104) && (16 in P.attr.modules)",
+      "accessScheduleManagementReports": "(P.attr.company_type == 105) && (16 in P.attr.modules)",
+      "accessBIDashboards": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "NewTab": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "EVV": {
+    "actions": {
+      "accessEVVTab": "(request.resource.attr.evv_state in P.attr.states) && (11 in P.attr.modules)"
+    }
+  },
+  "TimeManagement": {
+    "actions": {
+      "accessTimesheetsTab": "12 in P.attr.modules"
+    }
+  },
+  "Billing": {
+    "actions": {
+      "accessBillingTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)",
+      "accessPriorAuthorizationTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)",
+      "accessChangeCaptureTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)",
+      "accessClaimsTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)",
+      "accessRemittancesTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)",
+      "accessAccountsReceivableTab": "(request.resource.attr.billing_state in P.attr.states) && (18 in P.attr.modules)"
+    }
+  },
+  "DocumentCenter": {
+    "actions": {
+      "accessDocumentsTab": "14 in P.attr.modules"
+    }
+  },
+  "FormBuilder": {
+    "actions": {
+      "accessFormBuilderTab": "15 in P.attr.modules",
+      "accessFormLibraryTab": "15 in P.attr.modules",
+      "accessFormReportsTab": "15 in P.attr.modules",
+      "accessReportBuilderTab": "15 in P.attr.modules"
+    }
+  },
+  "Scheduler": {
+    "actions": {
+      "accessSchedulerTab": "20 in P.attr.modules",
+      "scheduleSession": "20 in P.attr.modules",
+      "scheduleSessionForOtherEmployees": "20 in P.attr.modules",
+      "editSession": "20 in P.attr.modules",
+      "markAttendance": "20 in P.attr.modules",
+      "modifySessionTask": "20 in P.attr.modules",
+      "addSessionNote": "20 in P.attr.modules"
+    }
+  },
+  "activeCustomerReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "planRenewalReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "clientStatusReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "clientTerminationReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "employeeNotesReport": {
+    "actions": {
+      "access": "P.attr.company_type == 104"
+    }
+  },
+  "tasksReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "billingInvoiceReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (P.attr.company_type != 101)"
+    }
+  },
+  "billingTransactionReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "claimBalanceReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "billingOutstandingBalanceReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "claimCollectionReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "serviceAuthorizationReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "payrollReport": {
+    "actions": {
+      "access": "(16 in P.attr.modules)"
+    }
+  },
+  "debarmentReport": {
+    "actions": {
+      "access": ""
+    }
+  },
+  "NJConsolidatedDebarmentReport": {
+    "actions": {
+      "access": "(16 in P.attr.modules) && ('NJ' in P.attr.states)"
+    }
+  },
+  "EVVReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 102) && ('NJ' in P.attr.states) && (11 in P.attr.modules)"
+    }
+  },
+  "EVVInvoice": {
+    "actions": {
+      "access": "(P.attr.company_type == 102) && ('NJ' in P.attr.states) && (11 in P.attr.modules)"
+    }
+  },
+  "clientAttendanceReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 105) && (16 in P.attr.modules)"
+    }
+  },
+  "dailyAttendanceSummary": {
+    "actions": {
+      "access": "(P.attr.company_type == 105) && (16 in P.attr.modules)"
+    }
+  },
+  "employeeSessionsReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 105) && (16 in P.attr.modules)"
+    }
+  },
+  "demographicsDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "HRDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "customerDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "employeeDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "financialDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "operationsDashboard": {
+    "actions": {
+      "access": "('NJ' in P.attr.states) && (P.attr.company_type == 101) && (16 in P.attr.modules)"
+    }
+  },
+  "MTSummaryReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "visitReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "MTCompletionDetailReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "managementReviewReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "MTRejectionReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "priorAuthUtilizationReport": {
+    "actions": {
+      "access": "(18 in P.attr.modules) && (19 in P.attr.modules)"
+    }
+  },
+  "timeAndExpensesReport": {
+    "actions": {
+      "access": "((P.attr.company_type == 102) || (P.attr.company_type == 104)) && (15 in P.attr.modules) && (12 in P.attr.modules)"
+    }
+  },
+  "lateMTReport": {
+    "actions": {
+      "access": "(P.attr.company_type == 101)"
+    }
+  },
+  "Home": {
+    "actions": {
+      "access": "",
+      "accessDashboard": "",
+      "accessDDDSyncTab": "",
+      "accessSCManagementTab": "",
+      "accessCustomersTab": "",
+      "accessUpcomingAppointmentsTab": "(P.attr.company_type != 105)",
+      "accessRecentCalls": "(P.attr.company_type != 105 && P.attr.company_type != 104)",
+      "accessRecentNotes": "",
+      "accessSCCustomers": "(P.attr.company_type == 101)",
+      "accessSCManagement": "(P.attr.company_type == 101)",
+      "accessScheduler": "(P.attr.company_type == 105)"
+    }
+  },
+  "Workflows": {
+    "actions": {
+      "accessWorkflowsTab": "23 in P.attr.modules",
+      "accessActiveWorkflowsTab": "23 in P.attr.modules",
+      "accessWorkflowLibraryTab": "23 in P.attr.modules",
+      "accessWorkflowBuilderTab": "23 in P.attr.modules"
+    }
+  },
+  "Settings": {
+    "actions": {
+      "access": "",
+      "accessSettingsGeneralTab": "",
+      "accessSettingsSubscriptionTab": "",
+      "accessSettingsAgencyTab": "",
+      "accessSettingsBillingTab": "",
+      "accessSettingsEmployeeTab": "",
+      "accessSettingsAdvancedTab": "",
+      "accessSettingsUserExperienceTab": "",
+      "inviteEmployees": ""
+    }
+  },
+  "Projects": {
+    "actions": {
+      "accessAdminLevelProjects": "",
+      "accessManagerLevelProjects": "",
+      "accessEmployeeLevelProjects": "",
+      "createNewProject": ""
+    }
+  },
+  "Customers": {
+    "actions": {
+      "accessAdminLevelCustomers": "",
+      "accessManagerLevelCustomers": "",
+      "createNewCustomer": ""
+    }
+  },
+  "Intake": {
+    "actions" : {
+      "createIntake": ""
+    }
+  },
+  "Referrals": {
+    "actions": {
+      "accessReferralsTab": "24 in P.attr.modules",
+      "createNewReferral": "24 in P.attr.modules"
+    }
+  }
+}
