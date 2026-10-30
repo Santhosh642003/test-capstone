@@ -83,24 +83,26 @@ const repair = (form) => {
   const seen = new Set();
   const renames = [];
   let repairs = 0;
+  const log = []; // one entry per repair applied, in document order (shown by smoke:model --out)
+  const fix = (entry) => { log.push(entry); repairs += 1; };
   walk(copy.components, (c) => {
-    if (TYPE_ALIASES[c.type]) { c.type = TYPE_ALIASES[c.type]; repairs += 1; }
+    if (TYPE_ALIASES[c.type]) { fix({ change: 'type-alias', key: c.key, from: c.type, to: TYPE_ALIASES[c.type] }); c.type = TYPE_ALIASES[c.type]; }
     const wantsInput = !LAYOUT_TYPES.has(c.type);
-    if (wantsInput && c.input !== true) { c.input = true; repairs += 1; }
-    if (!wantsInput && c.input !== false) { c.input = false; repairs += 1; }
+    if (wantsInput && c.input !== true) { c.input = true; fix({ change: 'set-input', key: c.key, value: true }); }
+    if (!wantsInput && c.input !== false) { c.input = false; fix({ change: 'set-input', key: c.key, value: false }); }
     const original = c.key;
     let key = KEY_PATTERN.test(original || '') ? original : toKey(original || c.label || c.title, c.type);
     const base = key;
     let n = 2;
     while (seen.has(key)) key = `${base.slice(0, 60)}${n++}`;
     seen.add(key);
-    if (key !== original) repairs += 1;
+    if (key !== original) fix({ change: 'key-renamed', from: original === undefined ? null : original, to: key });
     c.key = key;
     renames.push({ from: original, to: key });
     if (OPTION_TYPES.has(c.type) && Array.isArray(c.values)) {
       const before = c.values.length;
       c.values = c.values.filter((v) => v && String(v.label || '').trim()).map((v) => ({ ...v, label: String(v.label), value: String(v.value || toKey(v.label, 'option')) }));
-      if (c.values.length !== before) repairs += 1;
+      if (c.values.length !== before) fix({ change: 'dropped-empty-options', key, count: before - c.values.length });
     }
     if (c.type === 'select') {
       const src = (c.data && c.data.values) || c.values || [];
@@ -109,7 +111,7 @@ const repair = (form) => {
     }
     if (TEXT_ONLY_TYPES.has(c.type) && c.type === 'content' && typeof c.html !== 'string') c.html = '';
   });
-  return { definition: copy, renames, repairs };
+  return { definition: copy, renames, repairs, log };
 };
 
 // Problems that make a draft unsafe to hand to the builder. Empty list = valid.

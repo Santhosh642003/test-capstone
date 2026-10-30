@@ -15,6 +15,7 @@ const {
 const {
   PROMPT_VERSION, SYSTEM_PROMPT, CONTRACT_PROMPT, REPAIR_PROMPT, pageRangeNote, priorNote,
 } = require('./formIngestionPrompts');
+
 const MAX_BYTES = 20 * 1024 * 1024;
 const MAX_PAGES = 30;
 const CHUNK_PAGES = 5;          // pages per model call for long PDFs
@@ -317,6 +318,7 @@ const runIngestion = async (buffer, { filename = 'form.pdf', callModel, onStage 
   let fixed = repair(merged.definition);
   let problems = validate(fixed.definition);
   let modelRepairs = 0;
+  let modelRepairEntry = null;
   if (problems.length) {
     log(`form-ingestion: ${problems.length} validation problems after deterministic repair; asking the model once`);
     const text = `${REPAIR_PROMPT}\n\nProblems:\n${problems.map((p) => `- ${p}`).join('\n')}\n\nDefinition:\n${JSON.stringify({ definition: fixed.definition, fields: merged.fields })}`;
@@ -324,10 +326,11 @@ const runIngestion = async (buffer, { filename = 'form.pdf', callModel, onStage 
       const { content, usage: u } = await callModel({ system: SYSTEM_PROMPT, text, pdf: null, filename, label: 'form-ingestion-repair' });
       usage = sumUsage(usage, u || {});
       modelRepairs = 1;
+      modelRepairEntry = { change: 'model-repair-pass', problemsSent: problems.slice(0, 20), accepted: false };
       const again = normaliseEnvelope(parseJsonFromLlmContent(content));
       const refixed = repair(again.definition);
       const reproblems = validate(refixed.definition);
-      if (reproblems.length <= problems.length) { merged = again; fixed = refixed; problems = reproblems; }
+      if (reproblems.length <= problems.length) { merged = again; fixed = refixed; problems = reproblems; modelRepairEntry.accepted = true; }
     } catch (e) {
       if (e instanceof FoundryRateLimitError) throw e;
       log(`form-ingestion: repair pass failed: ${e.message}`);
@@ -340,6 +343,7 @@ const runIngestion = async (buffer, { filename = 'form.pdf', callModel, onStage 
     definition: fixed.definition,
     fields,
     problems,
+    repairLog: [...(modelRepairEntry ? [modelRepairEntry] : []), ...fixed.log],
     usage: {
       model,
       promptVersion: PROMPT_VERSION,

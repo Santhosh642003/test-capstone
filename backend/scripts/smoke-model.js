@@ -3,6 +3,9 @@
 //   npm run smoke:model                      # eval/pdfs/sample-isp-intake.pdf
 //   npm run smoke:model -- path/to/blank.pdf # your own blank PDF (<= 5 pages: one call)
 //   flags: --text-only (skip JSON mode), --allow-chunking (PDFs over 5 pages = several calls)
+//          --out <file.json>  also write the draft Form.io definition, the per-field manifest (type, label, section, source
+//                             page, confidence, notes, flags) and the list of auto-repairs to that file. Contains no secrets:
+//                             no key, URL, headers or raw model text, and the file is scrubbed for the key before writing.
 // Needs ONLY FOUNDRY_API_KEY + FOUNDRY_URL (+ optional FOUNDRY_LLM_MODEL). No SQL, no blob. Never prints the key.
 process.env.FW_LOGGING_METHOD = 'console'; // running this must never upload/delete anything in the log container
 const fs = require('fs');
@@ -12,7 +15,9 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const args = process.argv.slice(2);
 const flag = (f) => args.includes(f);
-const pdfArg = args.find((a) => !a.startsWith('--'));
+const outIdx = args.indexOf('--out');
+const outArg = outIdx === -1 ? null : args[outIdx + 1];
+const pdfArg = args.find((a, i) => !a.startsWith('--') && (outIdx === -1 || i !== outIdx + 1));
 const pdfPath = path.resolve(pdfArg || path.join(__dirname, '..', 'eval', 'pdfs', 'sample-isp-intake.pdf'));
 
 const line = (k, v) => console.log(`  ${k.padEnd(22)} ${v}`);
@@ -32,6 +37,8 @@ const hostOf = (u) => { try { return new URL(u).host; } catch (e) { return '(inv
     process.exit(2);
   }
   if (!fs.existsSync(pdfPath)) { console.log(`NOT RUN: PDF not found: ${pdfPath}`); process.exit(2); }
+  if (outIdx !== -1 && (!outArg || outArg.startsWith('--'))) { console.log('NOT RUN: --out needs a file path, e.g. --out draft.json'); process.exit(2); }
+  if (outArg && /^\.env/.test(path.basename(outArg))) { console.log('NOT RUN: refusing to write the draft over an .env file.'); process.exit(2); }
   const pdf = fs.readFileSync(pdfPath);
 
   let pages;
@@ -92,6 +99,27 @@ const hostOf = (u) => { try { return new URL(u).host; } catch (e) { return '(inv
   const flagged = result.fields.filter((f) => f.flags.length || (f.confidence !== null && f.confidence < 0.85) || f.notes).length;
   line('Fields needing review', `${flagged} (low model confidence, notes, or heuristic flags)`);
   if (result.problems.length) { console.log('\nValidator errors:'); result.problems.slice(0, 15).forEach((e) => console.log(`  - ${e}`)); }
+  if (outArg) {
+    const outPath = path.resolve(outArg);
+    const draft = {
+      note: 'Smoke-test output. Plumbing check on one PDF, not an accuracy measurement. Contains no credentials.',
+      generatedAt: new Date().toISOString(),
+      promptVersion: result.usage.promptVersion,
+      deployment: model,
+      jsonMode: result.usage.jsonMode,
+      pdf: path.basename(pdfPath),
+      pages: result.usage.pages,
+      usage: { promptTokens: p, completionTokens: c, seconds: result.usage.seconds, modelCalls: calls.length },
+      validatorErrors: result.problems,
+      definition: result.definition,
+      manifest: result.fields.map((f) => ({ key: f.key, type: f.type, label: f.label, section: f.section, sourcePage: f.sourcePage, confidence: f.confidence, notes: f.notes, flags: f.flags })),
+      autoRepairs: result.repairLog,
+    };
+    const json = fi.scrub(JSON.stringify(draft, null, 2), apiKey);
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, `${json}\n`);
+    line('Draft written to', outPath);
+  }
   console.log('\n(This checks plumbing, not accuracy. For scores run: npm run eval:forms)');
   process.exit(result.problems.length === 0 ? 0 : 4);
 })().catch((e) => { console.log(`UNEXPECTED ERROR: ${String(e.message).slice(0, 300)}`); process.exit(1); });
