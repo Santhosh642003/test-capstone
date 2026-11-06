@@ -8,7 +8,7 @@ Demo mode (`REACT_APP_DEMO=1`) skips Azure AD, opens on **Admin Tools → Import
 For real environments set `REACT_APP_IMPORT_FORM_ENABLED=true` (feature flag); without it the two pages are hidden.
 
 ## 5-minute script
-1. **Import Form** → "Use sample PDF" (or drop any PDF ≤ 20 MB). Watch the staged progress (~10 s; the model call is simulated in demo mode).
+1. **Import Form** → click **Replay real GPT-4.1 result** (an unedited response captured from the Azure deployment on 2026-10-30 for the sample PDF; the header says it is a replay, not a live call) or **Use sample PDF (simulated)** (a hand-made draft). Both take ~10 s of staged progress. In the real replay the checkbox group and the table come back with empty labels: the review screen flags them (2 fields need review), and you fix them inline.
 2. **Review** — PDF on the left, tabs on the right:
    - *Fields*: confidence badges, ⚑ reasons ("Ambiguous checkbox group", "Very short label"), jump to PDF page, edit label/type/required inline (rename "Dx" → "Primary Diagnosis" — the flag clears). Toggle "Needs review only".
    - *Builder*: full Form.io builder on the same draft. *Preview*: live rendered form.

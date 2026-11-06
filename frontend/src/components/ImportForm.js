@@ -78,13 +78,13 @@ class PreviewBoundary extends React.Component {
 
 // ---- Upload step ----
 function UploadStep({ onFile, error, busy }) {
-  const onDrop = useCallback((files) => { if (files[0]) onFile(files[0]); }, [onFile]);
+  const onDrop = useCallback((files) => { if (files[0]) onFile(files[0], 'sample'); }, [onFile]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false, accept: { 'application/pdf': ['.pdf'] }, disabled: busy });
 
-  const useSample = async () => {
+  const loadSample = async (variant = 'sample') => {
     const res = await fetch(`${process.env.PUBLIC_URL}/demo/sample-isp-intake.pdf`);
     const blob = await res.blob();
-    onFile(new File([blob], 'sample-isp-intake.pdf', { type: 'application/pdf' }));
+    onFile(new File([blob], 'sample-isp-intake.pdf', { type: 'application/pdf' }), variant);
   };
 
   return (
@@ -110,9 +110,12 @@ function UploadStep({ onFile, error, busy }) {
       {DEMO_MODE && (
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
-            Demo mode — the model response is simulated for the bundled sample form.
+            Demo mode — no live model call is made. “Replay real GPT-4.1 result” shows an unedited response captured from Azure; “simulated” is a hand-made draft.
           </Typography>
-          <Button variant="outlined" startIcon={<AutoAwesomeIcon />} onClick={useSample} disabled={busy}>Use sample PDF</Button>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button variant="contained" startIcon={<AutoAwesomeIcon />} onClick={() => loadSample('real')} disabled={busy}>Replay real GPT-4.1 result</Button>
+            <Button variant="outlined" startIcon={<AutoAwesomeIcon />} onClick={() => loadSample('sample')} disabled={busy}>Use sample PDF (simulated)</Button>
+          </Stack>
         </Box>
       )}
     </Box>
@@ -176,11 +179,11 @@ function FieldsPanel({ definition, meta, onEdit, onGoToPage }) {
                       : <Chip size="small" variant="outlined" label="—" />}
                   </TableCell>
                   <TableCell sx={{ pl: 1 + r.depth }}>
-                    {r.type === 'datagrid' || r.component?.type === 'datagrid' ? <b>{r.label} (table)</b> : (
+                    {(
                       <TextField
                         variant="standard" fullWidth size="small" value={r.label}
                         onChange={(e) => onEdit(r.key, (c) => { c.label = e.target.value; })}
-                        helperText={<span style={{ fontFamily: 'monospace' }}>{r.key}</span>}
+                        helperText={<span style={{ fontFamily: 'monospace' }}>{r.type === 'datagrid' ? 'table · ' : ''}{r.key}</span>}
                       />
                     )}
                   </TableCell>
@@ -319,6 +322,7 @@ function ReviewStep({ draft, file, jobId, apiurl, user, onPublished, onRestart }
           <Typography variant="caption" color="text.secondary">
             {draft.usage.model} · prompt {draft.usage.promptVersion} · {draft.usage.pages} pages · {(draft.usage.promptTokens + draft.usage.completionTokens).toLocaleString()} tokens · {draft.usage.seconds}s
             {draft.usage.repaired ? ` · ${draft.usage.repaired} auto-repair` : ''}
+            {draft.usage.replayNote ? ` · ${draft.usage.replayNote}` : ''}
           </Typography>
         </Box>
         {flaggedCount > 0 && <Chip color="warning" label={`${flaggedCount} fields need review`} />}
@@ -396,12 +400,12 @@ export default function ImportForm({ apiurl, user, onNavigate }) {
     }, 700);
   }, [apiurl]);
 
-  const handleFile = async (f) => {
+  const handleFile = async (f, variant) => {
     setError('');
     const problem = await precheck(f);
     if (problem) { setError(problem); return; }
     setFile(f); setJob(null); setStep('processing');
-    try { const id = await startImport(apiurl, f); setJobId(id); poll(id); }
+    try { const id = await startImport(apiurl, f, variant); setJobId(id); poll(id); }
     catch (e) { setError(e.response?.data?.message || 'Upload failed. Please try again.'); setStep('upload'); }
   };
 

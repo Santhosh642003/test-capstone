@@ -4,6 +4,7 @@
 import axios from 'axios';
 import { DEMO_MODE } from '../config';
 import { SAMPLE_DEFINITION, SAMPLE_META, SAMPLE_USAGE } from '../demo/sampleDraft';
+import { REAL_DEFINITION, REAL_FIELDS, REAL_USAGE } from '../demo/realDraft';
 import { flatten, repair, validate } from '../formio/validate';
 
 export const COMPANY_TYPES = [
@@ -98,7 +99,8 @@ export const precheck = async (file) => {
 
 // All real-mode calls go to FWAPI (/api/fieldworker/task_form/...), where the model call, validation and
 // pack tables live. `apiurl` is the FWAPI base for the selected environment (see FW_APIURL in config.js).
-export const startImport = async (apiurl, file) => {
+// variant (demo mode only): 'sample' = the polished simulated draft, 'real' = replay of the captured GPT-4.1 response
+export const startImport = async (apiurl, file, variant = 'sample') => {
   if (!DEMO_MODE) {
     const body = new FormData();
     body.append('file', file);
@@ -107,7 +109,7 @@ export const startImport = async (apiurl, file) => {
   }
   const s = load();
   const jobId = `demo-${Date.now()}`;
-  s.jobs[jobId] = { startedAt: Date.now(), filename: file.name };
+  s.jobs[jobId] = { startedAt: Date.now(), filename: file.name, variant };
   return jobId;
 };
 
@@ -133,6 +135,7 @@ export const getImportJob = async (apiurl, jobId) => {
     const stage = [...STAGES].reverse().find((st) => elapsed >= st.at);
     return { status: 'running', stage: stage.label, progress: Math.round((elapsed / DEMO_TOTAL_MS) * 100) };
   }
+  if (job.variant === 'real') return { status: 'done', draft: buildDraft({ definition: REAL_DEFINITION, fields: REAL_FIELDS, usage: REAL_USAGE }) };
   const fields = Object.entries(SAMPLE_META).map(([key, m]) => ({ key, ...m }));
   return { status: 'done', draft: buildDraft({ definition: SAMPLE_DEFINITION, fields, usage: SAMPLE_USAGE }) };
 };
