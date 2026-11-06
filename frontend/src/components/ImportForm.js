@@ -15,7 +15,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import PdfViewer from './PdfViewer';
 import { useNotify } from './Feedback';
-import { DEMO_MODE } from '../config';
+import { DEMO_MODE, LIVE_API } from '../config';
 import { heuristicFlags, flatten, validate } from '../formio/validate';
 import {
   COMPANY_TYPES, US_STATES, buildManifest, getImportJob, listCommunityForms, precheck, publishForm, startImport,
@@ -78,7 +78,7 @@ class PreviewBoundary extends React.Component {
 
 // ---- Upload step ----
 function UploadStep({ onFile, error, busy }) {
-  const onDrop = useCallback((files) => { if (files[0]) onFile(files[0], 'sample'); }, [onFile]);
+  const onDrop = useCallback((files) => { if (files[0]) onFile(files[0], 'dropped'); }, [onFile]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false, accept: { 'application/pdf': ['.pdf'] }, disabled: busy });
 
   const loadSample = async (variant = 'sample') => {
@@ -110,7 +110,9 @@ function UploadStep({ onFile, error, busy }) {
       {DEMO_MODE && (
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
-            Demo mode — no live model call is made. “Replay real GPT-4.1 result” shows an unedited response captured from Azure; “simulated” is a hand-made draft.
+            {LIVE_API
+              ? 'LIVE MODE: a PDF you drop above is converted by the real model through your local import API (about 15-60 s). The two buttons below only replay saved drafts for the bundled sample form.'
+              : 'Demo mode: no live model, so dropping your own PDF is refused. “Replay real GPT-4.1 result” shows an unedited response captured from Azure for the bundled sample; “simulated” is a hand-made draft.'}
           </Typography>
           <Stack direction="row" spacing={2} justifyContent="center">
             <Button variant="contained" startIcon={<AutoAwesomeIcon />} onClick={() => loadSample('real')} disabled={busy}>Replay real GPT-4.1 result</Button>
@@ -404,6 +406,11 @@ export default function ImportForm({ apiurl, user, onNavigate }) {
     setError('');
     const problem = await precheck(f);
     if (problem) { setError(problem); return; }
+    if (DEMO_MODE && !LIVE_API && variant === 'dropped') {
+      // Without a live API the demo can only show saved drafts for the bundled sample: never show them for someone else's PDF.
+      setError('Demo mode has no live model, so it cannot convert your own PDF. It can only show the bundled sample (use the buttons below). To convert any PDF with the real model, start the live import API and run "npm run start:live" (see DEMO.md, "Live mode").');
+      return;
+    }
     setFile(f); setJob(null); setStep('processing');
     try { const id = await startImport(apiurl, f, variant); setJobId(id); poll(id); }
     catch (e) { setError(e.response?.data?.message || 'Upload failed. Please try again.'); setStep('upload'); }

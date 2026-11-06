@@ -19,3 +19,13 @@ For real environments set `REACT_APP_IMPORT_FORM_ENABLED=true` (feature flag); w
 
 ## Real mode (against FWAPI)
 Unset `REACT_APP_DEMO` and set `REACT_APP_IMPORT_FORM_ENABLED=true`; the two pages then call `<FWAPI>/task_form/...` (see `../backend/FORM_INGESTION.md` for the SQL migration, config and endpoint list). The Customer-view tab is demo-only.
+
+## Live mode: convert ANY PDF with the real model (needs your Azure env)
+Demo mode (`npm run start:demo`) has no model: it can only replay saved drafts for the bundled sample, and it now **refuses** a PDF you drop yourself instead of showing the sample's fields. To convert your own blank PDF with the real GPT-4.1:
+
+1. `backend/.env` needs `FOUNDRY_API_KEY`, `FOUNDRY_URL` (base ending `/openai/v1`), optionally `FOUNDRY_LLM_MODEL`, and **`FW_ENV=dev`** (the local import API refuses to start without it).
+2. Terminal 1: `cd backend` → `npm install` (once) → `npm run serve:import`. It prints `Live import API ready on http://localhost:4000/...`. It listens on localhost only, uses SQL nowhere, stores no PDF, and the dev auth bypass applies to that process only.
+3. Terminal 2: `cd frontend` → `npm run start:live` → open http://localhost:3000. The banner says **LIVE MODE**; drop a blank PDF on the upload box. Expect 15-60 s per 5 pages (longer PDFs are converted 5 pages at a time).
+4. The review screen, Builder and Preview then show what the model really returned for your PDF. Publish and the Form Packs tab still use the in-browser demo store.
+
+Port 4000 busy: `IMPORT_PORT=4001 npm run serve:import` and set `REACT_APP_LIVE_API=http://localhost:4001/api/fieldworker` for the front end. Always do one dry run of your exact PDF before presenting: real forms with tables or dense layouts can need manual fixes, which is what the review screen is for.

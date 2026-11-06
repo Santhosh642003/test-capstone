@@ -48,7 +48,8 @@
     "eject": "react-scripts eject",
     "dockerProdDeploy": "set NODE_OPTIONS=--openssl-legacy-provider && npm run build && az acr login --name fieldworker && docker build -t fieldworker.azurecr.io/fieldworkermis:misfw . && docker push fieldworker.azurecr.io/fieldworkermis:misfw && az webapp restart --resource-group Fieldworker --name FieldworkerMIS",
     "start:demo": "cross-env REACT_APP_DEMO=1 NODE_OPTIONS=--max-old-space-size=4096 npm run start",
-    "build:demo": "cross-env REACT_APP_DEMO=1 NODE_OPTIONS=--max-old-space-size=4096 npm run build"
+    "build:demo": "cross-env REACT_APP_DEMO=1 NODE_OPTIONS=--max-old-space-size=4096 npm run build",
+    "start:live": "cross-env REACT_APP_DEMO=1 REACT_APP_LIVE_API=http://localhost:4000/api/fieldworker NODE_OPTIONS=--max-old-space-size=4096 npm run start"
   },
   "eslintConfig": {
     "extends": [

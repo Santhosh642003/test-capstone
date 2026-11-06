@@ -45,4 +45,8 @@ const DEMO_MODE = process.env.REACT_APP_DEMO === '1';
 // Feature flag for the Import Form and Form Packs pages (brief §6).
 const IMPORT_FORM_ENABLED = DEMO_MODE || process.env.REACT_APP_IMPORT_FORM_ENABLED === 'true';
 
-export { DEMO_MODE, IMPORT_FORM_ENABLED };
+// Demo + live: PDFs the user DROPS are sent to this local import API (backend: `npm run serve:import`) and converted by the
+// real model. The bundled-sample buttons keep replaying saved drafts. Empty = no live model in demo mode.
+const LIVE_API = DEMO_MODE ? (process.env.REACT_APP_LIVE_API || '') : '';
+
+export { DEMO_MODE, IMPORT_FORM_ENABLED, LIVE_API };

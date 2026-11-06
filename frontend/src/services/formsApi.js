@@ -2,7 +2,7 @@
 // Real mode talks to the endpoints in the project brief (§5.1, §5.5); demo mode
 // (REACT_APP_DEMO=1) uses an in-browser store so the flow can be shown without a backend.
 import axios from 'axios';
-import { DEMO_MODE } from '../config';
+import { DEMO_MODE, LIVE_API } from '../config';
 import { SAMPLE_DEFINITION, SAMPLE_META, SAMPLE_USAGE } from '../demo/sampleDraft';
 import { REAL_DEFINITION, REAL_FIELDS, REAL_USAGE } from '../demo/realDraft';
 import { flatten, repair, validate } from '../formio/validate';
@@ -101,10 +101,11 @@ export const precheck = async (file) => {
 // pack tables live. `apiurl` is the FWAPI base for the selected environment (see FW_APIURL in config.js).
 // variant (demo mode only): 'sample' = the polished simulated draft, 'real' = replay of the captured GPT-4.1 response
 export const startImport = async (apiurl, file, variant = 'sample') => {
-  if (!DEMO_MODE) {
+  // Real mode always calls the API. In demo mode only a user-dropped PDF does, and only when a live API is configured.
+  if (!DEMO_MODE || (LIVE_API && variant === 'dropped')) {
     const body = new FormData();
     body.append('file', file);
-    const { data } = await axios.post(`${apiurl}/task_form/import`, body);
+    const { data } = await axios.post(`${LIVE_API || apiurl}/task_form/import`, body);
     return data.jobId;
   }
   const s = load();
@@ -123,8 +124,8 @@ export const buildDraft = ({ definition, fields = [], usage = {} }) => {
 };
 
 export const getImportJob = async (apiurl, jobId) => {
-  if (!DEMO_MODE) {
-    const { data } = await axios.get(`${apiurl}/task_form/import/${jobId}`);
+  if (!String(jobId).startsWith('demo-')) { // demo jobs are in-browser; anything else is a real API job
+    const { data } = await axios.get(`${LIVE_API || apiurl}/task_form/import/${jobId}`);
     if (data.status === 'done') return { status: 'done', draft: buildDraft(data.result) };
     return data;
   }

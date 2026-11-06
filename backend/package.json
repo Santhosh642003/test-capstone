@@ -23,7 +23,8 @@
     "eval:forms": "node scripts/eval-form-ingestion.js",
     "check:env": "node scripts/check-env.js",
     "smoke:model": "node scripts/smoke-model.js",
-    "e2e:import": "node scripts/e2e-import.js"
+    "e2e:import": "node scripts/e2e-import.js",
+    "serve:import": "node scripts/serve-import.js"
   },
   "author": "",
   "license": "ISC",
